@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('https://wellversed.in/cdn/shop/articles/shutterstock_1717786156_1_1170x.jpg?v=1599106135'); /* Add your background image URL here */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .welcome-message {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .diet-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 6px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .diet-form label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .diet-form input[type="number"],
+        .diet-form select {
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .diet-form button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .diet-form button:hover {
+            background-color: #555;
+            transform: scale(1.05); /* Add a slight zoom effect on hover */
+        }
+
+        .meal-plan-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 6px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .meal-plan {
+            padding: 20px;
+        }
+
+        .meal {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-message">
+        <h1>Welcome to the Diet Recommendation System</h1>
+        <p>Let us help you achieve your health and fitness goals with a personalized meal plan.</p>
+    </div>
+
+    <h1>Diet Recommendation System</h1>
+    <div class="diet-form">
+        <label for="age">Age:</label>
+        <input type="number" id="age" min="1" max="100">
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" min="1" max="200">
+
+        <label for="activity">Activity Level:</label>
+        <select id="activity">
+            <option value="sedentary">Sedentary (little or no exercise)</option>
+            <option value="lightly-active">Lightly Active (light exercise/sports 1-3 days/week)</option>
+            <option value="very-active">Very Active (hard exercise/sports 6-7 days a week)</option>
+        </select>
+
+        <label for="diet-type">Dietary Preference:</label>
+        <select id="diet-type">
+            <option value="vegetarian">Vegetarian</option>
+            <option value="non-vegetarian">Non-Vegetarian</option>
+        </select>
+
+        <label for="health-goal">Health Goal:</label>
+        <select id="health-goal">
+            <option value="maintain">Maintain Weight</option>
+            <option value="lose">Lose Weight</option>
+            <option value="gain">Gain Weight</option>
+        </select>
+
+        <button onclick="generateMealPlan()">Generate Meal Plan</button>
+    </div>
+
+    <div class="meal-plan-container" id="meal-plan">
+    </div>
+
+    <div class="meal-plan-container" id="meal-plan">
+    </div>
+
+    <script>
+        const mealPlans = {
+            vegetarian: {
+                maintain: {
+                    sedentary: {
+                        breakfast: "Poha (Flattened Rice) with peanuts and spices",
+                        lunch: "Chana Masala (Chickpea Curry) with Roti (Indian flatbread)",
+                        dinner: "Vegetable Biryani with Raita (Yogurt with herbs)"
+                    },
+                    'lightly-active': {
+                        breakfast: "Upma (Semolina porridge) with vegetables",
+                        lunch: "Palak Paneer (Spinach and Cottage Cheese Curry) with Rice",
+                        dinner: "Dal (Lentil Curry) with Roti"
+                    },
+                    'very-active': {
+                        breakfast: "Masala Dosa (Rice Crepe stuffed with spiced potatoes)",
+                        lunch: "Baingan Bharta with Naan",
+                        dinner: "Mushroom Pulao (Mushroom and Rice Pilaf) with Raita"
+                    }
+                },
+                lose: {
+                    sedentary: {
+                        breakfast: "Smoothie with apple and banana",
+                        lunch: "Chickpea salad with mixed greens",
+                        dinner: "Grilled portobello mushrooms with quinoa"
+                    },
+                    'lightly-active': {
+                        breakfast: "Greek yogurt with berries and honey",
+                        lunch: "Masoor Dal (Red Lentil Curry) with mixed greens",
+                        dinner: "Tofu and Vegetable Stir-Fry"
+                    },
+                    'very-active': {
+                        breakfast: "Oatmeal cooked with water or skimmed milk topped with sliced fruits and a teaspoon of honey",
+                        lunch: "A bowl of mixed fruits or a vegetable salad",
+                        dinner: "Grilled or stir-fried vegetables with a small portion of whole wheat roti or a light soup"
+                    }
+                },
+                gain: {
+                    sedentary: {
+                        breakfast: "Paratha (Stuffed Indian flatbread) with ghee",
+                        lunch: "1 cup moong dal + potato and cauliflower vegetable with rice",
+                        dinner: "Paneer tikka, rice, and a vegetable side dish"
+                    },
+                    'lightly-active': {
+                        breakfast: "Protein-packed smoothie with spinach, banana, and protein powder",
+                        lunch: "Brown rice or quinoa with a variety of vegetables and a source of plant-based protein like lentils or chickpeas",
+                        dinner: "PANEER or soybean or sweet potato with 3/4 roti and rice and salad"
+                    },
+                    'very-active': {
+                        breakfast: "A glass of whole milk with a handful of mixed nuts (almonds, cashews, and walnuts) 2-3 whole wheat parathas with a side of yogurt",
+                        lunch: "Chole (Chickpea Curry) with Rice",
+                        dinner: "Roti or whole wheat bread with a side of vegetable curry and a protein-rich source like tofu or paneer"
+                    }
+                }
+            },
+            'non-vegetarian': {
+                maintain: {
+                    sedentary: {
+                        breakfast: "Scrambled eggs with spinach and tomatoes",
+                        lunch: "Grilled chicken breast with chapati",
+                        dinner: "Baked salmon with sweet potato"
+                    },
+                    'lightly-active': {
+                        breakfast: "Turkey and avocado sandwich",
+                        lunch: "Grilled shrimp with mixed greens",
+                        dinner: "Grilled chicken with asparagus"
+                    },
+                    'very-active': {
+                        breakfast: "Omelette with mushrooms and cheese",
+                        lunch: "Chicken handi and chicken wrap",
+                        dinner: "Swordfish with roasted Brussels sprouts"
+                    }
+                },
+                lose: {
+                    sedentary: {
+                        breakfast: "Omelette + black coffee",
+                        lunch: "Mix Vegetable Salad + Chicken Fried Rice + Buttermilk",
+                        dinner: "Green Salad + Chicken Palak Khichda + curd"
+                    },
+                    'lightly-active': {
+                        breakfast: "Brown Bread Sandwich + 2 Egg Whites Butter Milk/ Skimmed Milk",
+                        lunch: "Boiled egg Salad Multigrain Chapati Vegetable Boiled chicken piece Buttermilk",
+                        dinner: "Boiled chicken / Roasted Chicken Mixed salad"
+                    },
+                    'very-active': {
+                        breakfast: "Boiled egg whites + Lemongrass Tea + Vegetable Upma",
+                        lunch: "Chicken Veggie Salad Bajra Roti Leafy Vegetable Moong dal Buttermilk",
+                        dinner: "Mix Vegetable Soup + 2 eggs omelet + beans and carrot sauteed+ milk"
+                    }
+                },
+                gain: {
+                    sedentary: {
+                        breakfast: "2 egg brown bread sandwich + green chutney + 1 cup milk + 3 cashews + 4 almonds + 2 walnuts",
+                        lunch: "Veg Salad+ 1 bowl curd+ 1 bowl rice + 1 bowl chicken masala",
+                        dinner: "1 big bowl veg salad+ 1 bowl veg raita+ 1 bowl chicken biryani"
+                    },
+                    'lightly-active': {
+                        breakfast: "2 egg omelets with onions and other vegetables of choice with 2 buttered toast",
+                        lunch: "1 cup moong dal/ chicken curry + 1 cup potato and cauliflower vegetable + 3 chapatti + 1/2 cup rice + salad",
+                        dinner: "Roti or whole wheat bread with a side of chicken or fish curry and vegetables"
+                    },
+                    'very-active': {
+                        breakfast: "2 eggs omelet with 2 multigrain toast + 1 bowl sautéed vegetables + 1 glass skim milk",
+                        lunch: "Veg Salad + half bowl curd / 1 bowl veg raita + 1 bowl rice with 1 bowl mutton curry",
+                        dinner: "1 bowl Tomato soup + 1 bowl chicken manchurian + 1/2 bowl veg fried rice"
+                    }
+                }
+            }
+        };
+
+        function generateMealPlan() {
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activityLevel = document.getElementById('activity').value;
+            const dietType = document.getElementById('diet-type').value;
+            const healthGoal = document.getElementById('health-goal').value;
+
+            if (!age || !weight || !activityLevel || !dietType || !healthGoal) {
+                alert("Please fill in all the fields.");
+                return;
+            }
+
+            const mealPlanElement = document.getElementById('meal-plan');
+            mealPlanElement.innerHTML = '';
+
+            const mealPlan = mealPlans[dietType][healthGoal][activityLevel];
+            const breakfast = mealPlan.breakfast;
+            const lunch = mealPlan.lunch;
+            const dinner = mealPlan.dinner;
+
+            const mealPlanHtml = `
+                <div class="meal">
+                    <h3>Breakfast</h3>
+                    <p>${breakfast}</p>
+                </div>
+                <div class="meal">
+                    <h3>Lunch</h3>
+                    <p>${lunch}</p>
+                </div>
+                <div class="meal">
+                    <h3>Dinner</h3>
+                    <p>${dinner}</p>
+                </div>
+            `;
+
+            mealPlanElement.innerHTML = mealPlanHtml;
+        }
+    </script>
+</body>
+</html>
